@@ -1,0 +1,260 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kartičky Rodinné finance</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: jedna úzká centrální kolona, přepínač režimů nahoře, velká karta uprostřed, ovládání pod ní */
+:root{
+  --bg:#f1eef8; --surface:#ffffff; --fg:#1e1530; --muted:#6a5f82; --line:#d9d1ea;
+  --accent:#6d3fc4; --accent-fg:#ffffff; --good:#1a7f4b; --good-bg:#dff3e7; --bad:#b3372c; --bad-bg:#f8e1de;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#150f24; --surface:#1f1735; --fg:#ece6fa; --muted:#a99ec6; --line:#382c5a;
+  --accent:#b794f6; --accent-fg:#1b0f38; --good:#58d68d; --good-bg:#16402b; --bad:#ff8f84; --bad-bg:#4a2220; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#150f24; --surface:#1f1735; --fg:#ece6fa; --muted:#a99ec6; --line:#382c5a;
+  --accent:#b794f6; --accent-fg:#1b0f38; --good:#58d68d; --good-bg:#16402b; --bad:#ff8f84; --bad-bg:#4a2220; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--display);font-size:1.7rem;line-height:1.1;margin:0;text-wrap:balance}
+.sub{color:var(--muted);font-size:.9rem;margin:4px 0 0}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);padding:4px;border-radius:10px}
+.tabs button{border:0;background:none;color:var(--muted);font:500 .9rem var(--body);padding:8px 14px;border-radius:7px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-fg)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.bar{display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.fill{height:100%;background:var(--accent);width:0;transition:width .25s}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 .85rem var(--body);padding:7px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.scene{perspective:1200px}
+.card{position:relative;width:100%;min-height:340px;cursor:pointer;transform-style:preserve-3d;transition:transform .45s;border:0;background:none;padding:0;text-align:left;color:inherit;font:inherit}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:12px;box-shadow:0 1px 0 var(--line),0 10px 24px -16px rgba(0,0,0,.35)}
+.back{transform:rotateY(180deg)}
+.label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.term{font-family:var(--display);font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.1;text-wrap:balance}
+.def{font-size:1.1rem}
+.ex{color:var(--muted);font-size:.95rem}
+.hint{position:absolute;bottom:12px;right:18px;font-size:.75rem;color:var(--muted)}
+.row{display:flex;gap:10px}
+.btn{flex:1;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .95rem var(--body);padding:13px 10px;border-radius:10px;cursor:pointer}
+.btn.good{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.btn.bad{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.btn.main{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.kbd{font-size:.78rem;color:var(--muted);text-align:center}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:6px}
+.answers{display:grid;gap:8px}
+.ans{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 1rem var(--body);padding:13px 16px;border-radius:10px;cursor:pointer}
+.ans.right{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.ans.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.ans:disabled{cursor:default}
+.result{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:32px 20px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.big{font-family:var(--display);font-size:3rem;line-height:1;font-variant-numeric:tabular-nums}
+.miss{text-align:left;width:100%;font-size:.9rem;color:var(--muted);display:grid;gap:4px}
+.match{display:grid;grid-template-columns:2fr 3fr;gap:10px}
+.col{display:grid;gap:8px;min-width:0;align-content:start}
+.m{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 .85rem/1.35 var(--body);padding:12px;border-radius:10px;cursor:pointer;overflow-wrap:anywhere;min-width:0}
+.m.t{font-weight:600;font-family:var(--display);font-size:.95rem}
+.m.sel{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.m.done{background:var(--good-bg);border-color:var(--good);color:var(--good);cursor:default}
+.m.err{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.mhelp{font-size:.85rem;color:var(--muted);margin:0 0 12px}
+@media (prefers-reduced-motion:reduce){.card,.fill{transition:none}}
+</style>
+<main>
+  <header>
+    <div>
+      <h1>Rodinné finance</h1>
+      <p class="sub">16 pojmů na procvičování: rozpočet, výdaje, příjmy, dluhy</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-cards" aria-selected="true">Kartičky</button>
+      <button role="tab" id="tab-match" aria-selected="false">Spojování</button>
+      <button role="tab" id="tab-quiz" aria-selected="false">Test</button>
+    </div>
+  </header>
+  <div class="opts">
+    <button class="chip" id="o-swap" aria-pressed="false">Ukazovat definici</button>
+    <button class="chip" id="o-unk" aria-pressed="false">Jen neznámé</button>
+    <button class="chip" id="o-shuf">Zamíchat</button>
+  </div>
+  <div class="bar"><span id="count"></span><div class="track"><div class="fill" id="fill"></div></div><span id="score"></span></div>
+  <section id="view"></section>
+</main>
+<script>
+const DATA=[
+["Fixní výdaje","Pravidelné platby, které musíte zaplatit každý měsíc v podobné výši.","nájem, energie"],
+["Variabilní výdaje","Pohyblivé výdaje, které se měsíc od měsíce mění a můžete je snáze ovlivnit.","jídlo, zábava"],
+["Pravidelné příjmy","Peníze, které do rozpočtu přicházejí stabilně.","výplata, starobní důchod, kapesné"],
+["Nepravidelné příjmy","Nárazové finanční přilepšení, s kterým nelze dopředu pevně počítat.","roční bonusy, dary"],
+["Schodkový (deficitní) rozpočet","Finanční situace, kdy rodina utratí za měsíc více peněz, než kolik dokázala vydělat.",""],
+["Vyrovnaný rozpočet","Stav, kdy se celkové příjmy rodiny přesně rovnají jejím celkovým výdajům.",""],
+["Přebytkový rozpočet","Ideální stav, kdy po zaplacení všech výdajů zbývají v rozpočtu peníze na spoření.",""],
+["Zbytné výdaje","Nákupy pro radost, bez kterých se v případě finanční tísně dokážete obejít.","kino, kavárny"],
+["Nezbytné výdaje","Výdaje nutné k přežití a udržení střechy nad hlavou.","základní potraviny, léky, bydlení"],
+["Pasivní příjem","Peníze, které získáváte pravidelně bez nutnosti každodenní práce.","pronájem bytu"],
+["Finanční plán","Strategie rodiny, jak dosáhnout velkých cílů a nedostat se do dluhů.","koupě auta, rekonstrukce"],
+["Exekuce","Nucené zabavení majetku nebo peněz z účtu dlužníka k uspokojení věřitele.",""],
+["Osobní bankrot","Zákonný způsob oddlužení pro lidi, kteří nedokáží splácet své dluhy a chtějí začít znovu.",""],
+["Věřitel","Člověk nebo instituce, která někomu půjčila peníze a má právo je žádat zpět.","banka"],
+["Dlužník","Osoba, která si od někoho půjčila peníze a má povinnost je podle dohody vrátit.",""],
+["Úroková sazba","Procento z půjčené částky, které dlužník platí navíc jako odměnu za poskytnutí peněz.",""]
+].map(([t,d,e],i)=>({id:i,t,d,e}));
+
+const $=s=>document.querySelector(s), view=$("#view");
+let mode="cards", swap=false, onlyUnk=false, known=new Set();
+try{known=new Set(JSON.parse(localStorage.getItem("kf-known")||"[]"))}catch(e){}
+const save=()=>{try{localStorage.setItem("kf-known",JSON.stringify([...known]))}catch(e){}};
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+/* ---- Kartičky ---- */
+let deck=[], idx=0, flipped=false;
+function buildDeck(keepOrder){
+  let base=DATA.filter(c=>!onlyUnk||!known.has(c.id));
+  if(!keepOrder) base=shuffle(base);
+  deck=base; idx=0; flipped=false;
+}
+function renderCards(){
+  $("#score").textContent=`${known.size}/${DATA.length} umím`;
+  if(!deck.length){
+    view.innerHTML=`<div class="result"><div class="big">🎉</div><p>Všech ${DATA.length} pojmů umíš.</p><button class="btn main" id="reset" style="flex:none;padding-inline:24px">Začít znovu</button></div>`;
+    $("#count").textContent="";$("#fill").style.width="100%";
+    $("#reset").onclick=()=>{known.clear();save();onlyUnk=false;$("#o-unk").setAttribute("aria-pressed","false");buildDeck();renderCards()};
+    return;
+  }
+  if(idx>=deck.length){
+    const left=DATA.filter(c=>!known.has(c.id)).length;
+    view.innerHTML=`<div class="result"><div class="big">${known.size}/${DATA.length}</div><p>Kolo hotovo. ${left?`Zbývá ${left} neznámých pojmů.`:"Umíš všechno."}</p>
+    <div class="row" style="width:100%">${left?`<button class="btn main" id="again-unk">Procvičit neznámé</button>`:""}<button class="btn" id="again">Celá sada znovu</button></div></div>`;
+    $("#count").textContent=`${deck.length} / ${deck.length}`;$("#fill").style.width="100%";
+    if(left)$("#again-unk").onclick=()=>{onlyUnk=true;$("#o-unk").setAttribute("aria-pressed","true");buildDeck();renderCards()};
+    $("#again").onclick=()=>{onlyUnk=false;$("#o-unk").setAttribute("aria-pressed","false");buildDeck();renderCards()};
+    return;
+  }
+  const c=deck[idx];
+  const term=`<div class="label">Pojem</div><div class="term">${esc(c.t)}</div>`;
+  const def=`<div class="label">Význam</div><div class="def">${esc(c.d)}</div>${c.e?`<div class="ex">Např. ${esc(c.e)}</div>`:""}`;
+  const front=swap?def:term, back=swap?`<div class="label">Pojem</div><div class="term">${esc(c.t)}</div>`:def;
+  view.innerHTML=`<div style="display:flex;flex-direction:column;gap:16px">
+    <div class="scene"><button class="card${flipped?" flip":""}" id="card" aria-label="Otočit kartičku">
+      <div class="face">${front}<span class="hint">klepni pro otočení</span></div>
+      <div class="face back">${back}</div></button></div>
+    <div class="row"><button class="btn bad" id="no">Ještě neumím</button><button class="btn good" id="yes">Umím</button></div>
+    <div class="kbd">Mezerník otočí · ← nebo 1 neumím · → nebo 2 umím</div></div>`;
+  $("#count").textContent=`${idx+1} / ${deck.length}`;
+  $("#fill").style.width=(idx/deck.length*100)+"%";
+  $("#card").onclick=()=>{flipped=!flipped;$("#card").classList.toggle("flip",flipped)};
+  $("#yes").onclick=()=>mark(true); $("#no").onclick=()=>mark(false);
+}
+function mark(ok){
+  if(idx>=deck.length)return;
+  const c=deck[idx]; ok?known.add(c.id):known.delete(c.id); save();
+  idx++; flipped=false; renderCards();
+}
+
+/* ---- Test ---- */
+let qs=[], qi=0, correct=0, answered=false, missed=[];
+function startQuiz(){qs=shuffle(DATA);qi=0;correct=0;answered=false;missed=[];renderQuiz()}
+function renderQuiz(){
+  $("#score").textContent=`${correct} správně`;
+  if(qi>=qs.length){
+    $("#count").textContent=`${qs.length} / ${qs.length}`;$("#fill").style.width="100%";
+    view.innerHTML=`<div class="result"><div class="big">${correct}/${qs.length}</div><p>${correct===qs.length?"Bez chyby.":"Chybně jsi odpověděl na tyto pojmy:"}</p>
+    ${missed.length?`<div class="miss">${missed.map(m=>`<div>• ${esc(m.t)}</div>`).join("")}</div>`:""}
+    <div class="row" style="width:100%"><button class="btn main" id="rq">Zkusit znovu</button></div></div>`;
+    $("#rq").onclick=startQuiz; return;
+  }
+  const c=qs[qi];
+  const opts=shuffle([c,...shuffle(DATA.filter(x=>x.id!==c.id)).slice(0,3)]);
+  $("#count").textContent=`${qi+1} / ${qs.length}`;
+  $("#fill").style.width=(qi/qs.length*100)+"%";
+  view.innerHTML=`<div style="display:flex;flex-direction:column;gap:16px">
+    <div class="q"><div class="label">Který pojem to je?</div><div class="def">${esc(c.d)}</div>${c.e?`<div class="ex">Např. ${esc(c.e)}</div>`:""}</div>
+    <div class="answers">${opts.map(o=>`<button class="ans" data-id="${o.id}">${esc(o.t)}</button>`).join("")}</div>
+    <div class="row"><button class="btn main" id="next" hidden>Další</button></div></div>`;
+  answered=false;
+  view.querySelectorAll(".ans").forEach(b=>b.onclick=()=>{
+    if(answered)return; answered=true;
+    const ok=+b.dataset.id===c.id;
+    if(ok)correct++; else missed.push(c);
+    view.querySelectorAll(".ans").forEach(x=>{x.disabled=true;if(+x.dataset.id===c.id)x.classList.add("right")});
+    if(!ok)b.classList.add("wrong");
+    $("#score").textContent=`${correct} správně`;
+    $("#next").hidden=false; $("#next").textContent=qi+1>=qs.length?"Výsledek":"Další"; $("#next").focus();
+    $("#next").onclick=()=>{qi++;renderQuiz()};
+  });
+}
+
+/* ---- Spojování ---- */
+const PAIRS=6;
+let mp=[],mL=[],mR=[],mSel=null,mDone=0,mErr=0;
+function startMatch(){
+  mp=shuffle(DATA).slice(0,PAIRS);mL=shuffle(mp);mR=shuffle(mp);mSel=null;mDone=0;mErr=0;renderMatch();
+}
+function matchBar(){
+  $("#count").textContent=`${mDone} / ${mp.length} párů`;
+  $("#fill").style.width=(mDone/mp.length*100)+"%";
+  $("#score").textContent=`${mErr} chyb`;
+}
+function renderMatch(){
+  view.innerHTML=`<p class="mhelp">Klepni na pojem a pak na jeho význam. Správná dvojice zůstane zelená.</p>
+  <div class="match" id="match">
+    <div class="col">${mL.map(c=>`<button class="m t" data-side="t" data-id="${c.id}">${esc(c.t)}</button>`).join("")}</div>
+    <div class="col">${mR.map(c=>`<button class="m" data-side="d" data-id="${c.id}">${esc(c.d)}</button>`).join("")}</div>
+  </div>`;
+  matchBar();
+  $("#match").onclick=e=>{
+    const el=e.target.closest(".m");
+    if(!el||el.classList.contains("done")||el.classList.contains("err"))return;
+    const cur={side:el.dataset.side,id:+el.dataset.id,el};
+    if(mSel&&mSel.el===el){el.classList.remove("sel");mSel=null;return}
+    if(!mSel||mSel.side===cur.side){if(mSel)mSel.el.classList.remove("sel");mSel=cur;el.classList.add("sel");return}
+    const a=mSel;mSel=null;a.el.classList.remove("sel");
+    if(a.id===cur.id){
+      a.el.classList.add("done");el.classList.add("done");mDone++;matchBar();
+      if(mDone>=mp.length)setTimeout(matchResult,600);
+    }else{
+      mErr++;matchBar();a.el.classList.add("err");el.classList.add("err");
+      setTimeout(()=>{a.el.classList.remove("err");el.classList.remove("err")},650);
+    }
+  };
+}
+function matchResult(){
+  view.innerHTML=`<div class="result"><div class="big">${mErr}</div><p>${mErr===0?"Bez jediné chyby.":mErr===1?"chyba v tomto kole":mErr<5?"chyby v tomto kole":"chyb v tomto kole"}</p>
+  <div class="row" style="width:100%"><button class="btn main" id="nm">Další kolo</button></div></div>`;
+  $("#nm").onclick=startMatch;
+}
+
+/* ---- Ovládání ---- */
+function setMode(m){
+  mode=m;
+  $("#tab-cards").setAttribute("aria-selected",m==="cards");
+  $("#tab-quiz").setAttribute("aria-selected",m==="quiz");
+  $("#tab-match").setAttribute("aria-selected",m==="match");
+  document.querySelector(".opts").hidden=m!=="cards";
+  if(m==="cards"){buildDeck();renderCards()}else if(m==="match")startMatch();else startQuiz();
+}
+$("#tab-match").onclick=()=>setMode("match");
+$("#tab-cards").onclick=()=>setMode("cards");
+$("#tab-quiz").onclick=()=>setMode("quiz");
+$("#o-swap").onclick=e=>{swap=!swap;e.currentTarget.setAttribute("aria-pressed",swap);e.currentTarget.textContent=swap?"Ukazovat pojem":"Ukazovat definici";flipped=false;renderCards()};
+$("#o-unk").onclick=e=>{onlyUnk=!onlyUnk;e.currentTarget.setAttribute("aria-pressed",onlyUnk);buildDeck();renderCards()};
+$("#o-shuf").onclick=()=>{buildDeck();renderCards()};
+document.addEventListener("keydown",e=>{
+  if(mode!=="cards"||!deck.length||idx>=deck.length)return;
+  if(e.code==="Space"){e.preventDefault();$("#card").click()}
+  else if(e.key==="ArrowRight"||e.key==="2")mark(true);
+  else if(e.key==="ArrowLeft"||e.key==="1")mark(false);
+});
+setMode("cards");
+</script>
+
+</body></html>
